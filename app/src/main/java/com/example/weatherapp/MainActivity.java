@@ -27,20 +27,19 @@ public class MainActivity extends AppCompatActivity {
         String cName = cityName.getText().toString();
 
         String content;
-        Weather weather = new Weather();
+        WeatherGetApi weatherGetApi = new WeatherGetApi();
 
         try {
-            content = weather.execute("https://api.openweathermap.org/data/2.5/weather?q=" +
+            content = weatherGetApi.execute("https://api.openweathermap.org/data/2.5/weather?q=" +
                     cName + "&appid=02c8363e966007ea1fae04f58aa05e24").get();
-            Log.i("contentData", content);
             JSONObject jsonObject = new JSONObject(content);
             String weatherData = jsonObject.getString("weather");
-            Log.i("weatherData", weatherData);
+
             JSONArray array = new JSONArray(weatherData);
 
             String mainTemp = jsonObject.getString("main");
 
-            int id = 0;
+            double visibility=0.0;
             String main = "";
             String description = "";
             String temperatureKelvinString = "";
@@ -49,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < array.length(); i++) {
                 JSONObject weatherPart = array.getJSONObject(i);
                 main = weatherPart.getString("main");
-                id = weatherPart.getInt("id");
                 description = weatherPart.getString("description");
             }
 
@@ -61,13 +59,15 @@ public class MainActivity extends AppCompatActivity {
 
           String celsiusString = String.valueOf((int)celsius);
 
-
-            Log.i("id", String.valueOf(id));
-            Log.i("main", main);
-            Log.i("Description", description);
+          visibility = Double.parseDouble(jsonObject.getString("visibility"));
+          int visibilityKilometer = (int) visibility/1000;
 
 
-            result.setText("Main : " + main + "\nDescription : "+description + "\nTemp: " + celsiusString+"*C");
+
+            result.setText("Main : " + main +
+                    "\nDescription : "+description +
+                    "\nTemp : " + celsiusString+"*C"+
+                    "\nVisibility : " + visibilityKilometer + " KM");
 
 
         } catch (Exception e) {

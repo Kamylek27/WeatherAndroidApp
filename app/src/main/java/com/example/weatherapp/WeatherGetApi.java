@@ -11,7 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 
-class Weather extends AsyncTask<String,Void,String> {
+class WeatherGetApi extends AsyncTask<String,Void,String> {
     @Override
     protected String doInBackground(String... address) {
         //String... means multiple address can be send. It acts as array
